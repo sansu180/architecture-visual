@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>建筑视觉工作室 · 专业建筑效果图制作</title>
+<style>
+  /* ===== 设计变量 ===== */
+  :root {
+    --bg: #FAF7F2;
+    --bg-white: #FFFFFF;
+    --ink: #2D2A26;
+    --ink-soft: #6B6560;
+    --ink-faint: #9A928A;
+    --accent: #C8743C;
+    --accent-light: #E8A87C;
+    --accent-bg: #FDF0E6;
+    --border: #E8E0D8;
+    --shadow: 0 2px 12px rgba(45, 42, 38, 0.06);
+    --shadow-lg: 0 8px 32px rgba(45, 42, 38, 0.1);
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* ===== 导航 ===== */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(250, 247, 242, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    padding: 8px 20px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: #B56530; }
+
+  /* ===== Hero ===== */
+  .hero {
+    margin-top: 64px;
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+  }
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(45,42,38,0.1) 0%, rgba(45,42,38,0.5) 100%);
+  }
+  .hero-content {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    max-width: 800px;
+    padding: 0 24px;
+  }
+  .hero-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .hero p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin-bottom: 32px;
+  }
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+  .btn-primary {
+    padding: 14px 36px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #B56530; transform: translateY(-2px); }
+  .btn-secondary {
+    padding: 14px 36px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.25); }
+
+  /* ===== 通用区块 ===== */
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .section-label {
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .section-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .section-desc {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ===== 服务区 ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .service-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+    border: 1px solid var(--border);
+  }
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--accent-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .service-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+  }
+  .service-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .service-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  /* ===== 作品区 ===== */
+  .works-section {
+    background: var(--bg-white);
+  }
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .work-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+    cursor: pointer;
+    background: var(--bg-white);
+  }
+  .work-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  .work-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+  }
+  .work-info {
+    padding: 20px 24px;
+  }
+  .work-info h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .work-info p {
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  /* ===== 流程区 ===== */
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    position: relative;
+  }
+  .process-step {
+    text-align: center;
+    padding: 0 12px;
+  }
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .process-step h4 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .process-step p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* ===== 优势区 ===== */
+  .features-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .feature-item {
+    text-align: center;
+    padding: 24px;
+  }
+  .feature-item .big-num {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .feature-item h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .feature-item p {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* ===== 联系区 ===== */
+  .contact-section {
+    background: linear-gradient(135deg, #2D2A26 0%, #4A3F35 100%);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .contact-left h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .contact-left p {
+    font-size: 15px;
+    opacity: 0.8;
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
+  .contact-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .channel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+  }
+  .channel svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--accent-light);
+    fill: none;
+    stroke-width: 2;
+  }
+  .contact-form {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    padding: 32px;
+  }
+  .contact-form h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent-light);
+  }
+  .form-group select option {
+    background: var(--ink);
+    color: #fff;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: #B56530; }
+
+  /* ===== 页脚 ===== */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--ink-faint);
+    font-size: 13px;
+  }
+
+  /* ===== Toast ===== */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--ink);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 200;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ===== 响应式 ===== */
+  /* 右下角覆盖层，盖住"豆包AI生成"水印 */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 110px;
+    height: 28px;
+    background: #FAF7F2;
+    z-index: 99999;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero { height: 480px; }
+    .hero h1 { font-size: 30px; }
+    .hero p { font-size: 15px; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .section { padding: 56px 20px; }
+    .section-title { font-size: 26px; }
+    .services-grid,
+    .works-grid,
+    .features-row {
+      grid-template-columns: 1fr;
+    }
+    .process-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .contact-section {
+      grid-template-columns: 1fr;
+      padding: 32px 24px;
+      margin: 0 20px;
+    }
+    .contact-left h2 { font-size: 24px; }
+    .work-card img { height: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 导航 ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">建筑视觉<span>工作室</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">服务范围</a></li>
+      <li><a href="#works">作品展示</a></li>
+      <li><a href="#process">合作流程</a></li>
+      <li><a href="#contact">联系我们</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">免费报价</a>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <img src="assets/hero.jpg" alt="现代建筑效果图">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">专业建筑可视化 · 十年经验</div>
+    <h1>让建筑被看见</h1>
+    <p>专注建筑室外效果图制作，从方案到呈现，用视觉语言传递设计价值</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">开始咨询</a>
+      <a href="#works" class="btn-secondary">查看作品</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 服务范围 ===== -->
+<section class="section" id="services">
+  <div class="section-header">
+    <div class="section-label">服务范围</div>
+    <h2 class="section-title">我们能为你做什么</h2>
+    <p class="section-desc">覆盖建筑设计全阶段的视觉表达需求，从单体到群体，从日景到夜景</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1M9 13h1m4 0h1M9 17h1m4 0h1"/></svg>
+      </div>
+      <h3>室外建筑效果图</h3>
+      <p>住宅、别墅、商业、公建等各类建筑单体外观效果图，日景/夜景可选，照片级真实渲染</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+      </div>
+      <h3>鸟瞰图 / 总平效果图</h3>
+      <p>小区、园区、城市综合体等项目鸟瞰效果图，准确表达规划布局与空间关系</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </div>
+      <h3>夜景灯光效果图</h3>
+      <p>建筑夜景、景观照明、灯光秀效果表现，营造氛围与品质感，适合方案汇报与展示</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <h3>建筑动画 / 漫游</h3>
+      <p>建筑方案动画、园区漫游视频，多角度动态展示设计方案，提升汇报说服力</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+      </div>
+      <h3>室内效果图</h3>
+      <p>建筑室内空间效果图，包括大堂、样板间、办公空间等，与室外效果统一风格</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>规划 / 景观效果图</h3>
+      <p>城市设计、景观规划、公园广场等场景效果图，表达整体环境与设计意图</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 作品展示 ===== -->
+<section class="works-section" id="works">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-label">精选作品</div>
+      <h2 class="section-title">近期案例</h2>
+      <p class="section-desc">每一张图都是一次设计理念的视觉转译</p>
+    </div>
+    <div class="works-grid">
+      <div class="work-card" onclick="showToast('作品详情请联系我们获取')">
+        <img src="assets/work-villa.jpg" alt="独栋别墅效果图">
+        <div class="work-info">
+          <h4>现代独栋别墅</h4>
+          <p>住宅建筑 · 日景效果图</p>
+        </div>
+      </div>
+      <div class="work-card" onclick="showToast('作品详情请联系我们获取')">
+        <img src="assets/work-complex.jpg" alt="城市商业综合体鸟瞰">
+        <div class="work-info">
+          <h4>城市商业综合体</h4>
+          <p>鸟瞰图 · 黄昏场景</p>
+        </div>
+      </div>
+      <div class="work-card" onclick="showToast('作品详情请联系我们获取')">
+        <img src="assets/work-night.jpg" alt="建筑夜景效果图">
+        <div class="work-info">
+          <h4>售楼处夜景</h4>
+          <p>公建建筑 · 夜景灯光</p>
+        </div>
+      </div>
+      <div class="work-card" onclick="showToast('作品详情请联系我们获取')">
+        <img src="assets/work-museum.jpg" alt="美术馆建筑效果图">
+        <div class="work-info">
+          <h4>当代艺术美术馆</h4>
+          <p>文化建筑 · 极简风格</p>
+        </div>
+      </div>
+      <div class="work-card" onclick="showToast('作品详情请联系我们获取')">
+        <img src="assets/work-residential.jpg" alt="高层住宅建筑群">
+        <div class="work-info">
+          <h4>高层住宅社区</h4>
+          <p>住宅小区 · 日景效果图</p>
+        </div>
+      </div>
+      <div class="work-card" onclick="showToast('查看更多作品请联系我们')">
+        <div style="height:240px; background:var(--accent-bg); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;">
+          <div style="width:40px; height:40px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px;">+</div>
+          <span style="font-size:14px; color:var(--accent); font-weight:600;">查看更多</span>
+        </div>
+        <div class="work-info">
+          <h4>更多案例</h4>
+          <p>持续更新中</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 合作流程 ===== -->
+<section class="section" id="process">
+  <div class="section-header">
+    <div class="section-label">合作流程</div>
+    <h2 class="section-title">四步完成你的效果图</h2>
+    <p class="section-desc">清晰透明的协作流程，让每一步都心中有数</p>
+  </div>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="step-num">1</div>
+      <h4>沟通需求</h4>
+      <p>了解项目类型、风格要求、出图时间和预算，提供参考图更好</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">2</div>
+      <h4>确认报价</h4>
+      <p>根据需求给出明确报价和交付时间，双方确认后开始制作</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">3</div>
+      <h4>制作渲染</h4>
+      <p>建模、调材质、打灯光，过程中可沟通调整方向和细节</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">4</div>
+      <h4>交付定稿</h4>
+      <p>提供高清大图，含免费修改次数，满意后交付最终文件</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 优势数据 ===== -->
+<section class="works-section">
+  <div class="section">
+    <div class="features-row">
+      <div class="feature-item">
+        <div class="big-num">10+</div>
+        <h4>年行业经验</h4>
+        <p>深耕建筑可视化领域，熟悉各类建筑风格和表现手法</p>
+      </div>
+      <div class="feature-item">
+        <div class="big-num">500+</div>
+        <h4>完成项目</h4>
+        <p>服务过设计院、开发商、设计师和个人业主，口碑良好</p>
+      </div>
+      <div class="feature-item">
+        <div class="big-num">48h</div>
+        <h4>快速出图</h4>
+        <p>常规项目可在48小时内交付初稿，急单可加急处理</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 联系咨询 ===== -->
+<section class="section" id="contact" style="padding-bottom:60px;">
+  <div class="contact-section">
+    <div class="contact-left">
+      <h2>准备好开始了吗？</h2>
+      <p>告诉我们你的项目需求，我们会在工作时间内尽快回复，提供免费的初步报价和建议。</p>
+      <div class="contact-channels">
+        <div class="channel">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span>电话 / 微信：xxx-xxxx-xxxx</span>
+        </div>
+        <div class="channel">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+          <span>邮箱：hello@example.com</span>
+        </div>
+        <div class="channel">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>工作时间：周一至周日 9:00 - 21:00</span>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="submitForm(event)">
+      <h3>快速询价</h3>
+      <div class="form-group">
+        <label>您的称呼</label>
+        <input type="text" placeholder="怎么称呼您" required>
+      </div>
+      <div class="form-group">
+        <label>联系方式</label>
+        <input type="text" placeholder="手机号或微信号" required>
+      </div>
+      <div class="form-group">
+        <label>项目类型</label>
+        <select required>
+          <option value="">请选择</option>
+          <option>住宅 / 别墅效果图</option>
+          <option>商业 / 公建效果图</option>
+          <option>鸟瞰图 / 总平图</option>
+          <option>夜景灯光效果图</option>
+          <option>建筑动画 / 漫游</option>
+          <option>其他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>项目描述</label>
+        <textarea rows="3" placeholder="简单描述一下项目需求..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">提交询价</button>
+    </form>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+  <p>建筑视觉工作室 · 专业建筑效果图制作 · 本页面为示例展示</p>
+</footer>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast">已提交，我们会尽快联系您</div>
+
+<script>
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  showToast('已收到您的需求，我们会尽快联系您');
+  e.target.reset();
+}
+
+// 隐藏"豆包AI生成"水印
+function hideWatermark() {
+  const all = document.querySelectorAll('*');
+  for (let el of all) {
+    if (el.children.length === 0) {
+      const text = el.textContent.trim();
+      if (text === '豆包AI生成' || text === '豆包 AI 生成') {
+        el.style.display = 'none';
+        // 同时隐藏父元素（如果是容器）
+        if (el.parentElement) el.parentElement.style.display = 'none';
+      }
+    }
+  }
+}
+// 页面加载后执行，并定期检查
+window.addEventListener('load', () => {
+  hideWatermark();
+  setInterval(hideWatermark, 1500);
+});
+</script>
+
+</body>
+</html>
